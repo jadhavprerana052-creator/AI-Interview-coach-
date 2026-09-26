@@ -1,0 +1,379 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Coach</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .container {
+            width: 900px;
+            max-width: 95%;
+            min-height: 550px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Left Section */
+        .welcome {
+            width: 45%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome h1 {
+            font-size: 38px;
+            margin-bottom: 20px;
+        }
+
+        .welcome p {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        /* Form Section */
+        .form-section {
+            width: 55%;
+            padding: 45px 55px;
+        }
+
+        .form-section h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .input-box {
+            margin-bottom: 18px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 7px;
+            color: #444;
+            font-weight: bold;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .input-box input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .btn:hover {
+            background: #4f46e5;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .switch span {
+            color: #6366f1;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .forgot {
+            text-align: right;
+            margin: -5px 0 15px;
+        }
+
+        .forgot a {
+            color: #6366f1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .welcome {
+                width: 100%;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .welcome h1 {
+                font-size: 30px;
+            }
+
+            .form-section {
+                width: 100%;
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Welcome Section -->
+    <div class="welcome">
+
+        <h1>AI Interview Coach</h1>
+
+        <p>
+            Prepare smarter. Practice better. Perform with confidence.
+            Get ready for your next interview with our smart mock
+            interview and feedback system.
+        </p>
+
+        <ul class="features">
+            <li>🎤 AI Mock Interviews</li>
+            <li>🤖 Intelligent Interview Questions</li>
+            <li>📊 Performance Analysis</li>
+            <li>💡 Personalized Feedback</li>
+            <li>🚀 Improve Your Interview Skills</li>
+        </ul>
+
+    </div>
+
+    <!-- Forms -->
+    <div class="form-section">
+
+        <!-- LOGIN FORM -->
+        <div class="form active" id="loginForm">
+
+            <h2>Welcome Back!</h2>
+
+            <p class="subtitle">
+                Login to continue your interview preparation
+            </p>
+
+            <form onsubmit="login(event)">
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <div class="forgot">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button class="btn" type="submit">
+                    Login
+                </button>
+
+            </form>
+
+            <div class="switch">
+                Don't have an account?
+                <span onclick="showRegister()">Register</span>
+            </div>
+
+        </div>
+
+
+        <!-- REGISTER FORM -->
+        <div class="form" id="registerForm">
+
+            <h2>Create Account</h2>
+
+            <p class="subtitle">
+                Start your AI interview preparation journey
+            </p>
+
+            <form onsubmit="register(event)">
+
+                <div class="input-box">
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        id="registerName"
+                        placeholder="Enter your full name"
+                        required
+                    >
+                </div>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Create a password"
+                        required
+                    >
+                </div>
+
+                <div class="input-box">
+                    <label>Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        required
+                    >
+                </div>
+
+                <button class="btn" type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="switch">
+                Already have an account?
+                <span onclick="showLogin()">Login</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function showRegister() {
+        document.getElementById("loginForm").classList.remove("active");
+        document.getElementById("registerForm").classList.add("active");
+    }
+
+    function showLogin() {
+        document.getElementById("registerForm").classList.remove("active");
+        document.getElementById("loginForm").classList.add("active");
+    }
+
+    function register(event) {
+
+        event.preventDefault();
+
+        let name = document.getElementById("registerName").value;
+        let email = document.getElementById("registerEmail").value;
+        let password = document.getElementById("registerPassword").value;
+        let confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        alert("Registration successful!");
+
+        showLogin();
+    }
+
+    function login(event) {
+
+        event.preventDefault();
+
+        let email = document.getElementById("loginEmail").value;
+        let password = document.getElementById("loginPassword").value;
+
+        if (email && password) {
+            alert("Login successful!");
+
+            // You can redirect to your dashboard here:
+            // window.location.href = "dashboard.html";
+        }
+    }
+
+</script>
+
+</body>
+</html>
+```

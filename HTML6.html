@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Question</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 700px;
+            max-width: 92%;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        /* Progress */
+        .progress-box {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .progress {
+            width: 20%;
+            height: 100%;
+            background: #6366f1;
+            border-radius: 10px;
+            transition: 0.4s;
+        }
+
+        .question-card {
+            background: #f5f6ff;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .question-number {
+            color: #6366f1;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 25px;
+            line-height: 1.5;
+            color: #222;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .previous {
+            background: #ddd;
+            color: #333;
+        }
+
+        .next {
+            background: #6366f1;
+            color: white;
+        }
+
+        .previous:hover {
+            background: #ccc;
+        }
+
+        .next:hover {
+            background: #4f46e5;
+        }
+
+        .complete {
+            text-align: center;
+            display: none;
+        }
+
+        .complete h2 {
+            color: #16a34a;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 25px;
+            }
+
+            .question {
+                font-size: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- INTERVIEW SCREEN -->
+
+    <div id="interviewScreen">
+
+        <h1>🤖 AI Interview Coach</h1>
+
+        <p class="subtitle">
+            Smart Mock Interview
+        </p>
+
+
+        <!-- PROGRESS BAR -->
+
+        <div class="progress-box">
+
+            <div
+                class="progress"
+                id="progress">
+            </div>
+
+        </div>
+
+
+        <!-- QUESTION -->
+
+        <div class="question-card">
+
+            <div
+                class="question-number"
+                id="questionNumber">
+
+                Question 1 of 5
+
+            </div>
+
+
+            <div
+                class="question"
+                id="question">
+
+                Tell me about yourself and your professional background.
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <button
+                class="previous"
+                onclick="previousQuestion()">
+
+                ← Previous
+
+            </button>
+
+
+            <button
+                class="next"
+                id="nextButton"
+                onclick="nextQuestion()">
+
+                Next Question →
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPLETION SCREEN -->
+
+    <div
+        class="complete"
+        id="completeScreen">
+
+        <h2>🎉 Interview Completed!</h2>
+
+        <p>
+            You have completed all interview questions.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       INTERVIEW QUESTIONS
+    ========================= */
+
+    const questions = [
+
+        "Tell me about yourself and your professional background.",
+
+        "What are your strengths and weaknesses?",
+
+        "Why do you want to work for our company?",
+
+        "Describe a challenging project you worked on and how you solved it.",
+
+        "Where do you see yourself in the next five years?"
+
+    ];
+
+
+    let currentQuestion = 0;
+
+
+    /* =========================
+       DISPLAY QUESTION
+    ========================= */
+
+    function displayQuestion() {
+
+        document.getElementById("questionNumber")
+            .innerText =
+            "Question " +
+            (currentQuestion + 1) +
+            " of " +
+            questions.length;
+
+
+        document.getElementById("question")
+            .innerText =
+            questions[currentQuestion];
+
+
+        /* Update progress */
+
+        let progress =
+            ((currentQuestion + 1) /
+            questions.length) * 100;
+
+
+        document.getElementById("progress")
+            .style.width =
+            progress + "%";
+
+
+        /* Previous button */
+
+        document.querySelector(".previous")
+            .disabled =
+            currentQuestion === 0;
+
+
+        /* Next button */
+
+        if (
+            currentQuestion ===
+            questions.length - 1
+        ) {
+
+            document.getElementById("nextButton")
+                .innerText =
+                "Finish Interview ✓";
+
+        } else {
+
+            document.getElementById("nextButton")
+                .innerText =
+                "Next Question →";
+
+        }
+
+    }
+
+
+    /* =========================
+       NEXT QUESTION
+    ========================= */
+
+    function nextQuestion() {
+
+        if (
+            currentQuestion <
+            questions.length - 1
+        ) {
+
+            currentQuestion++;
+
+            displayQuestion();
+
+        } else {
+
+            document.getElementById(
+                "interviewScreen"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "completeScreen"
+            ).style.display = "block";
+
+        }
+
+    }
+
+
+    /* =========================
+       PREVIOUS QUESTION
+    ========================= */
+
+    function previousQuestion() {
+
+        if (currentQuestion > 0) {
+
+            currentQuestion--;
+
+            displayQuestion();
+
+        }
+
+    }
+
+
+    /* =========================
+       LOAD FIRST QUESTION
+    ========================= */
+
+    displayQuestion();
+
+</script>
+
+</body>
+</html>
+```
