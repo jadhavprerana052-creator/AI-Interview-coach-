@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - AI Interview Coach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6ff;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 18px;
+            border-radius: 10px;
+        }
+
+        .container {
+            padding: 35px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            color: #333;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 45px;
+        }
+
+        .card h3 {
+            color: #444;
+            margin: 15px 0 10px;
+        }
+
+        .card p {
+            color: #777;
+            min-height: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 20px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>👩‍💻 AI Interview Coach</h1>
+
+    <a href="/" class="logout">
+        Logout
+    </a>
+
+</div>
+
+<div class="container">
+
+    <div class="welcome">
+
+        <h2>Welcome, Admin 👋</h2>
+
+        <p>
+            Manage your AI Interview Coach system.
+        </p>
+
+    </div>
+
+    <div class="cards">
+
+        <!-- USERS -->
+
+        <div class="card">
+
+            <div class="icon">👥</div>
+
+            <h3>Manage Users</h3>
+
+            <p>
+                View and manage registered users.
+            </p>
+
+            <a href="/users" class="btn">
+                View Users
+            </a>
+
+        </div>
+
+
+        <!-- JOB ROLES -->
+
+        <div class="card">
+
+            <div class="icon">💼</div>
+
+            <h3>Manage Job Roles</h3>
+
+            <p>
+                Add and manage interview job roles.
+            </p>
+
+            <a href="/job_roles" class="btn">
+                Manage Roles
+            </a>
+
+        </div>
+
+
+        <!-- QUESTIONS -->
+
+        <div class="card">
+
+            <div class="icon">❓</div>
+
+            <h3>Manage Questions</h3>
+
+            <p>
+                Add and manage interview questions.
+            </p>
+
+            <a href="/questions" class="btn">
+                Manage Questions
+            </a>
+
+        </div>
+
+
+        <!-- REPORTS -->
+
+        <div class="card">
+
+            <div class="icon">📊</div>
+
+            <h3>Reports & Analytics</h3>
+
+            <p>
+                View interview scores and performance.
+            </p>
+
+            <a href="/reports" class="btn">
+    View Reports
+</a>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

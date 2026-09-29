@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interview Result</title>
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .box{
+            background:white;
+            width:500px;
+            padding:40px;
+            text-align:center;
+            border-radius:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,.25);
+        }
+
+        h1{color:#667eea}
+
+        .score{
+            font-size:60px;
+            font-weight:bold;
+            color:#667eea;
+            margin:20px;
+        }
+
+        button{
+            padding:13px 25px;
+            border:0;
+            border-radius:25px;
+            background:#667eea;
+            color:white;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>🎉 Interview Completed</h1>
+
+    <h2 id="role"></h2>
+
+    <div class="score" id="score"></div>
+
+    <h3 id="feedback"></h3>
+
+    <p>
+        Thank you for completing the AI Mock Interview.
+    </p>
+
+    <button onclick="location.href='/dashboard'">
+        Back to Dashboard
+    </button>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const role = params.get("role") || "Developer";
+
+const score = Number(params.get("score") || 0);
+
+document.getElementById("role").innerText =
+    "Role: " + role;
+
+document.getElementById("score").innerText =
+    score + "%";
+
+let feedback = "";
+
+if(score >= 70){
+
+    feedback =
+        "Good performance! Keep improving your technical and communication skills.";
+
+}else if(score >= 40){
+
+    feedback =
+        "Average performance. Practice more interview questions.";
+
+}else{
+
+    feedback =
+        "More practice is required. Keep learning and try again.";
+
+}
+
+document.getElementById("feedback").innerText = feedback;
+
+</script>
+
+</body>
+</html>

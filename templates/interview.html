@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>AI Interview</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .box{
+            width:700px;
+            background:white;
+            padding:35px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,.25);
+        }
+
+        h1{
+            color:#667eea;
+        }
+
+        #role{
+            font-size:18px;
+            color:#555;
+        }
+
+        .question{
+            background:#f1f3ff;
+            padding:25px;
+            border-radius:15px;
+            font-size:21px;
+            margin:25px 0;
+            min-height:30px;
+        }
+
+        textarea{
+            width:90%;
+            height:130px;
+            padding:15px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            resize:none;
+            font-size:16px;
+            box-sizing:border-box;
+        }
+
+        button{
+            padding:13px 25px;
+            margin:10px;
+            border:none;
+            border-radius:25px;
+            color:white;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            cursor:pointer;
+            font-weight:bold;
+            font-size:14px;
+        }
+
+        button:hover{
+            opacity:0.9;
+        }
+
+        #status{
+            color:#667eea;
+            font-weight:bold;
+        }
+
+        #timer{
+            color:#764ba2;
+            font-weight:bold;
+            font-size:16px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <h1>🎤 AI Mock Interview</h1>
+
+    <p id="role">
+        <b>Selected Role:</b> Loading...
+    </p>
+
+    <p id="timer">
+        ⏱️ Question Time: 0 seconds
+    </p>
+
+    <div class="question">
+
+        <span id="question">
+            Loading question...
+        </span>
+
+    </div>
+
+    <button onclick="speakQuestion()">
+        🔊 Speak Question
+    </button>
+
+    <button onclick="startListening()">
+        🎤 Start Answer
+    </button>
+
+    <p id="status">
+        Loading questions...
+    </p>
+
+    <textarea
+        id="answer"
+        placeholder="Your spoken answer will appear here..."
+    ></textarea>
+
+    <br>
+
+    <button onclick="nextQuestion()">
+        ➡️ Next Question
+    </button>
+
+    <button onclick="finishInterview()">
+        🏁 Finish Interview
+    </button>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   GET SELECTED ROLE
+========================================= */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const selectedRole =
+    params.get("role") || "Python Developer";
+
+document.getElementById("role").innerHTML =
+    "<b>Selected Role: " +
+    selectedRole +
+    "</b>";
+
+
+
+/* =========================================
+   VARIABLES
+========================================= */
+
+let questions = [];
+
+let current = 0;
+
+let answers = [];
+
+let questionTimes = [];
+
+let questionStartTime = null;
+
+let interviewStartTime = null;
+
+let interviewFinished = false;
+
+
+
+/* =========================================
+   LOAD QUESTIONS
+========================================= */
+
+async function loadQuestions(){
+
+    try{
+
+        document.getElementById("status").innerText =
+            "Loading questions...";
+
+        const response =
+            await fetch(
+                "/get_questions?role=" +
+                encodeURIComponent(selectedRole)
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "Unable to load questions"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        if(data.error){
+
+            throw new Error(
+                data.error
+            );
+
+        }
+
+        questions =
+            data.questions || [];
+
+        if(questions.length === 0){
+
+            document.getElementById("question").innerText =
+                "No questions available for this role.";
+
+            document.getElementById("status").innerText =
+                "Please add questions from Admin panel.";
+
+            return;
+
+        }
+
+        current = 0;
+
+        answers = [];
+
+        questionTimes = [];
+
+        /*
+           Interview start time
+        */
+        interviewStartTime =
+            new Date();
+
+        showQuestion();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("question").innerText =
+            "Unable to load questions.";
+
+        document.getElementById("status").innerText =
+            "Database connection or server error.";
+
+    }
+
+}
+
+
+
+/* =========================================
+   SHOW CURRENT QUESTION
+========================================= */
+
+function showQuestion(){
+
+    if(questions.length === 0){
+        return;
+    }
+
+    document.getElementById("question").innerText =
+        questions[current];
+
+    document.getElementById("answer").value =
+        "";
+
+    document.getElementById("status").innerText =
+        "Question " +
+        (current + 1) +
+        " of " +
+        questions.length;
+
+    /*
+       Start timer for this question
+    */
+    questionStartTime =
+        new Date();
+
+    updateTimer();
+
+}
+
+
+
+/* =========================================
+   QUESTION TIMER
+========================================= */
+
+function updateTimer(){
+
+    if(!questionStartTime){
+        return;
+    }
+
+    let now =
+        new Date();
+
+    let seconds =
+        Math.floor(
+            (now - questionStartTime) / 1000
+        );
+
+    document.getElementById("timer").innerText =
+        "⏱️ Question Time: " +
+        seconds +
+        " seconds";
+
+}
+
+
+
+/*
+   Update timer every second
+*/
+
+setInterval(
+    updateTimer,
+    1000
+);
+
+
+
+/* =========================================
+   SAVE CURRENT QUESTION TIME
+========================================= */
+
+function saveQuestionTime(){
+
+    if(!questionStartTime){
+        return;
+    }
+
+    let now =
+        new Date();
+
+    let seconds =
+        Math.floor(
+            (now - questionStartTime) / 1000
+        );
+
+    questionTimes[current] =
+        seconds;
+
+}
+
+
+
+/* =========================================
+   SPEAK QUESTION
+========================================= */
+
+function speakQuestion(){
+
+    if(questions.length === 0){
+        return;
+    }
+
+    let text =
+        questions[current];
+
+    window.speechSynthesis.cancel();
+
+    let speech =
+        new SpeechSynthesisUtterance(text);
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+
+/* =========================================
+   START MICROPHONE
+========================================= */
+
+function startListening(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        alert(
+            "Speech recognition is not supported. Please use Google Chrome."
+        );
+
+        return;
+
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "en-IN";
+
+    recognition.interimResults =
+        false;
+
+    recognition.continuous =
+        false;
+
+    document.getElementById("status").innerText =
+        "🎤 Listening... Please speak.";
+
+    try{
+
+        recognition.start();
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+    }
+
+    recognition.onresult =
+        function(event){
+
+            let text =
+                event.results[0][0].transcript;
+
+            document.getElementById("answer").value =
+                text;
+
+            document.getElementById("status").innerText =
+                "✅ Answer recorded successfully.";
+
+        };
+
+    recognition.onerror =
+        function(event){
+
+            console.log(event.error);
+
+            document.getElementById("status").innerText =
+                "❌ Microphone error. Please try again.";
+
+        };
+
+    recognition.onend =
+        function(){
+
+            if(
+                document.getElementById("answer").value.trim() === ""
+            ){
+
+                document.getElementById("status").innerText =
+                    "Click microphone and speak your answer.";
+
+            }
+
+        };
+
+}
+
+
+
+/* =========================================
+   NEXT QUESTION
+========================================= */
+
+function nextQuestion(){
+
+    if(questions.length === 0){
+        return;
+    }
+
+    /*
+       Save current question time
+    */
+    saveQuestionTime();
+
+    /*
+       Save current answer
+    */
+    let answer =
+        document.getElementById("answer").value.trim();
+
+    answers[current] =
+        answer;
+
+    if(
+        current <
+        questions.length - 1
+    ){
+
+        current++;
+
+        showQuestion();
+
+    }
+
+    else{
+
+        finishInterview();
+
+    }
+
+}
+
+
+
+/* =========================================
+   FINISH INTERVIEW
+========================================= */
+
+async function finishInterview(){
+
+    if(interviewFinished){
+        return;
+    }
+
+    if(questions.length === 0){
+        return;
+    }
+
+    /*
+       Save final question time
+    */
+    saveQuestionTime();
+
+    /*
+       Save final answer
+    */
+    let answer =
+        document.getElementById("answer").value.trim();
+
+    answers[current] =
+        answer;
+
+    /*
+       Calculate total interview duration
+    */
+    let interviewEndTime =
+        new Date();
+
+    let durationSeconds =
+        Math.floor(
+            (
+                interviewEndTime -
+                interviewStartTime
+            ) / 1000
+        );
+
+    /*
+       Count answered questions
+    */
+    let answered =
+        answers.filter(
+            function(a){
+
+                return a &&
+                       a.trim() !== "";
+
+            }
+        ).length;
+
+    /*
+       Calculate score
+    */
+    let score =
+        Math.round(
+            (answered /
+            questions.length) * 100
+        );
+
+    /*
+       Selected / Rejected
+    */
+    let status =
+        score >= 70
+        ? "Selected"
+        : "Rejected";
+
+    /*
+       Feedback
+    */
+    let feedback;
+
+    if(score >= 80){
+
+        feedback =
+            "Excellent performance! Your interview preparation is very good.";
+
+    }
+
+    else if(score >= 60){
+
+        feedback =
+            "Good performance. Improve your technical and communication skills.";
+
+    }
+
+    else{
+
+        feedback =
+            "Needs improvement. Practice more interview questions.";
+
+    }
+
+    document.getElementById("status").innerText =
+        "Saving your result...";
+
+
+
+    /* =========================================
+       CREATE ANSWER DETAILS
+    ========================================= */
+
+    let answerDetails = [];
+
+    for(
+        let i = 0;
+        i < questions.length;
+        i++
+    ){
+
+        answerDetails.push({
+
+            question_no:
+                i + 1,
+
+            question_text:
+                questions[i],
+
+            answer_text:
+                answers[i] || "",
+
+            answer_time_seconds:
+                questionTimes[i] || 0,
+
+            question_score:
+                answers[i] &&
+                answers[i].trim() !== ""
+                ? 100
+                : 0
+
+        });
+
+    }
+
+
+
+    /* =========================================
+       SAVE TO DATABASE
+    ========================================= */
+
+    try{
+
+        const response =
+            await fetch(
+                "/save_result",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        role:
+                            selectedRole,
+
+                        score:
+                            score,
+
+                        status:
+                            status,
+
+                        feedback:
+                            feedback,
+
+                        start_time:
+                            interviewStartTime.toISOString(),
+
+                        end_time:
+                            interviewEndTime.toISOString(),
+
+                        duration_seconds:
+                            durationSeconds,
+
+                        answers:
+                            answerDetails
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !data.success
+        ){
+
+            throw new Error(
+                data.error ||
+                "Server error"
+            );
+
+        }
+
+
+        interviewFinished =
+            true;
+
+
+        /*
+           Open result page
+        */
+        window.location.href =
+            "/result?role=" +
+            encodeURIComponent(
+                selectedRole
+            ) +
+
+            "&score=" +
+            score +
+
+            "&status=" +
+            encodeURIComponent(
+                status
+            ) +
+
+            "&feedback=" +
+            encodeURIComponent(
+                feedback
+            );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Result could not be saved. Please try again."
+        );
+
+        document.getElementById("status").innerText =
+            "❌ Unable to save result.";
+
+    }
+
+}
+
+
+
+/* =========================================
+   START INTERVIEW
+========================================= */
+
+loadQuestions();
+
+</script>
+
+</body>
+</html>

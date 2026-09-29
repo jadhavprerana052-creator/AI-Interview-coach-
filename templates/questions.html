@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Manage Questions - AI Interview Coach</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    margin:0;
+    background:#f4f6ff;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:22px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header h1{
+    margin:0;
+}
+
+.back{
+    color:white;
+    text-decoration:none;
+    background:rgba(255,255,255,.2);
+    padding:10px 18px;
+    border-radius:10px;
+}
+
+/* CONTAINER */
+
+.container{
+    padding:35px;
+    max-width:1400px;
+    margin:auto;
+}
+
+.title h2{
+    color:#333;
+}
+
+.title p{
+    color:#666;
+}
+
+/* ADD BOX */
+
+.add-box{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.1);
+    margin-bottom:30px;
+}
+
+.add-box h3{
+    color:#667eea;
+    margin-top:0;
+}
+
+label{
+    display:block;
+    margin:12px 0 7px;
+    font-weight:bold;
+    color:#333;
+}
+
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+    font-size:14px;
+}
+
+textarea{
+    height:100px;
+    resize:none;
+}
+
+.add-btn{
+    margin-top:18px;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ROLE SECTION */
+
+.role-section{
+    background:white;
+    margin-bottom:30px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.1);
+    overflow:hidden;
+}
+
+.role-header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:18px 22px;
+}
+
+.role-header h2{
+    margin:0;
+}
+
+.role-header p{
+    margin:6px 0 0;
+    opacity:.9;
+}
+
+/* TABLE */
+
+.table-container{
+    padding:20px;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#f0f2ff;
+    color:#555;
+    padding:14px;
+    text-align:left;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    color:#555;
+    vertical-align:top;
+}
+
+.id{
+    font-weight:bold;
+    color:#764ba2;
+    width:70px;
+}
+
+.question{
+    line-height:1.5;
+    color:#444;
+}
+
+.actions{
+    white-space:nowrap;
+}
+
+.edit-btn{
+    background:#667eea;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:bold;
+    display:inline-block;
+    margin-right:6px;
+}
+
+.delete-btn{
+    background:#e74c3c;
+    color:white;
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.empty{
+    text-align:center;
+    padding:25px;
+    color:#777;
+}
+
+/* QUESTION COUNT */
+
+.question-count{
+    display:inline-block;
+    margin-top:8px;
+    background:white;
+    color:#667eea;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .header{
+        padding:18px;
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .container{
+        padding:20px;
+    }
+
+    .table-container{
+        padding:12px;
+    }
+
+    th,
+    td{
+        padding:10px;
+        font-size:13px;
+    }
+
+    .edit-btn,
+    .delete-btn{
+        margin-bottom:5px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h1>❓ Manage Questions</h1>
+
+    <a href="/admin" class="back">
+        ← Admin Dashboard
+    </a>
+
+</div>
+
+
+<div class="container">
+
+    <!-- TITLE -->
+
+    <div class="title">
+
+        <h2>Interview Question Management</h2>
+
+        <p>
+            Manage interview questions separately for each job role.
+        </p>
+
+    </div>
+
+
+    <!-- ADD QUESTION -->
+
+    <div class="add-box">
+
+        <h3>➕ Add New Question</h3>
+
+        <form method="POST" action="/add_question">
+
+            <label>
+                Select Job Role
+            </label>
+
+            <select name="role_id" required>
+
+                <option value="">
+                    -- Select Job Role --
+                </option>
+
+                {% for role in roles %}
+
+                <option value="{{ role.id }}">
+                    {{ role.role_name }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <label>
+                Question
+            </label>
+
+            <textarea
+                name="question_text"
+                placeholder="Enter interview question"
+                required></textarea>
+
+
+            <button type="submit" class="add-btn">
+                ➕ Add Question
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ROLE-WISE QUESTIONS -->
+
+    {% if roles %}
+
+        {% for role in roles %}
+
+        <div class="role-section">
+
+            <!-- ROLE HEADER -->
+
+            <div class="role-header">
+
+                <h2>
+                    💼 {{ role.role_name }}
+                </h2>
+
+                <p>
+                    Interview questions for {{ role.role_name }}
+                </p>
+
+                <span class="question-count">
+                    Role ID: {{ role.id }}
+                </span>
+
+            </div>
+
+
+            <div class="table-container">
+
+                {% set role_questions = [] %}
+
+                {% for question in questions %}
+
+                    {% if question.role_id == role.id %}
+
+                        {% set dummy = role_questions.append(question) %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if role_questions %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Question
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for question in role_questions %}
+
+                        <tr>
+
+                            <td class="id">
+                                {{ question.id }}
+                            </td>
+
+
+                            <td class="question">
+                                {{ question.question_text }}
+                            </td>
+
+
+                            <td class="actions">
+
+                                <a
+                                    href="/edit_question/{{ question.id }}"
+                                    class="edit-btn">
+                                    ✏️ Edit
+                                </a>
+
+
+                                <a
+                                    href="/delete_question/{{ question.id }}"
+                                    class="delete-btn"
+                                    onclick="return confirm('Are you sure you want to delete this question?');">
+
+                                    🗑️ Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+                {% else %}
+
+                    <div class="empty">
+
+                        No questions available for
+                        <strong>{{ role.role_name }}</strong>.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="role-section">
+
+            <div class="empty">
+
+                No job roles available.
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

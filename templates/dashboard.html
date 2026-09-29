@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Interview Coach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7ff;
+            color: #222;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 7%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 9px 18px;
+            border-radius: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+
+        .welcome h1 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        .roles-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+        }
+
+        .role-card {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .role-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        .role-card h3 {
+            margin: 10px 0;
+        }
+
+        .role-card p {
+            color: #666;
+            min-height: 40px;
+        }
+
+        .start-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 11px 22px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <h2>🎤 AI Interview Coach</h2>
+    <a href="/" class="logout">Logout</a>
+</nav>
+
+<div class="container">
+
+    <div class="welcome">
+        <h1>Welcome to Your Dashboard 👋</h1>
+        <p>
+            Select your desired job role and start your smart mock interview.
+            Practice questions, answer using your voice and receive performance feedback.
+        </p>
+    </div>
+
+    <h2 class="roles-title">Select Your Job Role 💼</h2>
+
+    <div class="roles">
+
+        <div class="role-card">
+            <div class="icon">🐍</div>
+            <h3>Python Developer</h3>
+            <p>Practice Python programming and technical questions.</p>
+            <a href="/interview?role=Python%20Developer" class="start-btn">Start Interview</a>
+        </div>
+
+        <div class="role-card">
+            <div class="icon">☕</div>
+            <h3>Java Developer</h3>
+            <p>Practice Java, OOP and programming questions.</p>
+            <a href="/interview?role=Java%20Developer" class="start-btn">Start Interview</a>
+        </div>
+
+        <div class="role-card">
+            <div class="icon">🌐</div>
+            <h3>Web Developer</h3>
+            <p>Practice HTML, CSS, JavaScript and web questions.</p>
+            <a href="/interview?role=Web%20Developer" class="start-btn">Start Interview</a>
+        </div>
+
+        <div class="role-card">
+            <div class="icon">📊</div>
+            <h3>Data Analyst</h3>
+            <p>Practice SQL, Excel, Python and data analysis questions.</p>
+            <a href="/interview?role=Data%20Analyst" class="start-btn">Start Interview</a>
+        </div>
+
+        <div class="role-card">
+            <div class="icon">👩‍💼</div>
+            <h3>HR Executive</h3>
+            <p>Practice HR, communication and situational questions.</p>
+            <a href="/interview?role=HR%20Executive" class="start-btn">Start Interview</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
